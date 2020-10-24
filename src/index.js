@@ -5,6 +5,7 @@ module.exports = function check(str, bracketsConfig) {
     for (let i = 0; i < arr.length; i++){
       if (charElem === arr[i][0]) return arr[i][1];
     }
+    return undefined;
   }
   // разделяем открывающие и закрывающие скобки
   let open = new Set();
@@ -16,25 +17,27 @@ module.exports = function check(str, bracketsConfig) {
   console.log(open);
   console.log(close);
 // идём по строке 
-  let char = '';
   let lastChar = '';
   let stack = [];
   let strArr = str.split('');
- 
-  strArr.forEach(element => {
-      if (open.has(element) && !close.has(element)){
-        stack.push(element);
-        lastChar = element;
-      } else if (close.has(element)){
-        if (lastChar !=='') {
-          let closebrec = getCloseEl(lastChar, bracketsConfig);           
-          if (element === closebrec) {
+
+  for (let i = 0; i<strArr.length; i++){
+    let closebrec = getCloseEl(lastChar, bracketsConfig);  
+      if (open.has(strArr[i]) && strArr[i] != closebrec){
+        stack.push(strArr[i]);
+        lastChar = strArr[i];
+        console.log(stack);
+      } else if (close.has(strArr[i])){
+        if (lastChar === '') return false;
+        if (strArr[i] === closebrec) {
             stack.pop();
+            console.log(stack);
             lastChar = stack.length > 0? stack[stack.length - 1]:'';
-          }
-        } else return false
+            console.log('last=',lastChar)
+        }
       }
 
-   });
+   };
+   console.log (stack.length)
     return (stack.length === 0);
 }
